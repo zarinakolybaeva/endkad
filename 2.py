@@ -1,0 +1,127 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file_path = 'taxi.csv'
+df = pd.read_csv(file_path)
+
+print(df.head())
+
+df.fillna(df.mean(numeric_only=True), inplace=True)
+df.fillna('Unknown', inplace=True)
+
+df['Day_of_Week'] = df['Day_of_Week'].astype('category')
+df['Time_of_Day'] = df['Time_of_Day'].astype('category')
+df['Weather'] = df['Weather'].astype('category')
+
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Trip_Distance_km'], kde=True, bins=30)
+plt.title('Distribution of Trip Distances')
+plt.xlabel('Distance (km)')
+plt.ylabel('Frequency')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Trip_Price'], kde=True, bins=30, color='orange')
+plt.title('Distribution of Trip Prices')
+plt.xlabel('Price')
+plt.ylabel('Frequency')
+plt.show()
+
+avg_price_time = df.groupby('Time_of_Day')['Trip_Price'].mean()
+plt.figure(figsize=(8, 5))
+avg_price_time.plot(kind='bar', color='skyblue')
+plt.title('Average Trip Price by Time of Day')
+plt.xlabel('Time of Day')
+plt.ylabel('Average Price')
+plt.xticks(rotation=0)
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Traffic_Conditions', y='Trip_Price', data=df, palette='Set2')
+plt.title('Trip Prices by Traffic Conditions')
+plt.xlabel('Traffic Conditions')
+plt.ylabel('Trip Price')
+plt.show()
+
+plt.figure(figsize=(12, 8))
+correlation_matrix = df.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Day_of_Week', y='Trip_Price', data=df, palette='viridis')
+plt.title('Average Trip Price by Day of the Week')
+plt.xlabel('Day of the Week')
+plt.ylabel('Average Price')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Trip_Distance_km', y='Trip_Price', data=df, hue='Weather', alpha=0.7, palette='coolwarm')
+plt.title('Trip Price vs. Trip Distance')
+plt.xlabel('Trip Distance (km)')
+plt.ylabel('Trip Price')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Trip_Duration_Minutes'], kde=True, bins=30, color='green')
+plt.title('Distribution of Trip Durations')
+plt.xlabel('Duration (Minutes)')
+plt.ylabel('Frequency')
+plt.show()
+
+avg_price_weather = df.groupby('Weather')['Trip_Price'].mean()
+plt.figure(figsize=(8, 5))
+avg_price_weather.plot(kind='bar', color=['blue', 'orange', 'green'])
+plt.title('Average Trip Price by Weather Conditions')
+plt.xlabel('Weather')
+plt.ylabel('Average Price')
+plt.xticks(rotation=0)
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Trip_Duration_Minutes', y='Trip_Price', data=df, alpha=0.7, color='purple')
+plt.title('Trip Duration vs. Trip Price')
+plt.xlabel('Trip Duration (Minutes)')
+plt.ylabel('Trip Price')
+plt.show()
+
+avg_distance_passenger = df.groupby('Passenger_Count')['Trip_Distance_km'].mean()
+plt.figure(figsize=(8, 5))
+avg_distance_passenger.plot(kind='bar', color='teal')
+plt.title('Average Trip Distance by Passenger Count')
+plt.xlabel('Passenger Count')
+plt.ylabel('Average Distance (km)')
+plt.xticks(rotation=0)
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Weather', data=df, palette='viridis')
+plt.title('Count of Trips by Weather Condition')
+plt.xlabel('Weather Condition')
+plt.ylabel('Count')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Traffic_Conditions', y='Trip_Price', data=df, palette='coolwarm')
+plt.title('Average Trip Price by Traffic Conditions')
+plt.xlabel('Traffic Conditions')
+plt.ylabel('Average Price')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.lineplot(x='Trip_Duration_Minutes', y='Trip_Price', data=df, ci=None)
+plt.title('Trip Price Trends by Duration')
+plt.xlabel('Trip Duration (Minutes)')
+plt.ylabel('Trip Price')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Base_Fare', y='Trip_Price', data=df, alpha=0.7, color='red')
+plt.title('Base Fare vs. Trip Price')
+plt.xlabel('Base Fare')
+plt.ylabel('Trip Price')
+plt.show()
+
+print("Analysis Completed.")
